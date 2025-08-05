@@ -46,18 +46,15 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
-      - name: Build & export static site
+      - name: Build static site
         run: |
+          # This will emit your static files into out/SwiftPod thanks to output:'export'
           ${{ steps.detect-package-manager.outputs.runner }} next build
-          # No need for next export manually if you use `output: 'export'`,
-          # but if you still want to ensure the folder, run it explicitly:
-          ${{ steps.detect-package-manager.outputs.runner }} next export
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # point directly at your exported subfolder 
-          path: ./out/SwiftPod
+          path: out/SwiftPod
 
   deploy:
     runs-on: ubuntu-latest
